@@ -17,9 +17,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -58,56 +60,26 @@ class MainActivity : ComponentActivity(), Orientation.Listener {
                                 strokeWidth = 5f
                             )
 
-                            val halfWidth = canvasWidth/2f
-                            val angle = roll.value
-                            val h = halfWidth* tan(angle.toRadians)
-
                             val th = ((pitch.value*canvasHeight)/180f)
-                            val tw = 0;//((yaw.value*canvasWidth)/180f)
+                            val tw = ((yaw.value*canvasWidth)/180f)
 
-                            val angleRad = angle / 180f * PI
-                            val x = cos(angleRad).toFloat() //Fractional x
-                            val y = sin(angleRad).toFloat() //Fractional y
+                            val start = Offset(x = 0f+tw, y = canvasHeight/2f+th)
+                            val end = Offset(x = canvasWidth+tw, y = canvasHeight/2f+th)
 
-                            val radius = sqrt(size.width.pow(2) + size.height.pow(2)) / 2f
-                            val offset = center + Offset(x * radius, y * radius)
+                            val rect = Rect(Offset.Zero, size)
 
-                            val exactOffset = Offset(
-                                x = min(offset.x.coerceAtLeast(0f), size.width),
-                                y = size.height - min(offset.y.coerceAtLeast(0f), size.height)
-                            )
-                            drawLine(
-                                Brush.linearGradient(
-                                    colors = listOf(Color.Red,Color.Blue,Color.Green),
-                                    start = Offset(size.width, size.height) - exactOffset,
-                                    end = exactOffset
-                                ),
-                                start = Offset(x = 0f+tw, y = canvasHeight/2f-h.toFloat()+th),
-                                end = Offset(x = canvasWidth+tw, y = canvasHeight/2f+h.toFloat()+th),
-                                //color = Color.Red,
-                                strokeWidth = 5f,
-                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f,20f),20f)
-                            )
-                        }
-                        Box(
-                            modifier = Modifier.size(100.dp).align(Alignment.Center)
-                        ){
-                            AndroidView(
-                                modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
-                                factory = { context ->
-                                    // Creates custom view
-                                    AttitudeIndicator(context)
-                                },
-                                update = { view ->
-                                    view.setAttitude(pitch.value,roll.value)
-                                }
-                            )
-                        }
-
-                        Column() {
-                            Text(roll.value.toString())
-                            Text(pitch.value.toString())
-                            Text(yaw.value.toString())
+                            rotate(degrees = roll.value, rect.center) {
+                                drawLine(
+                                    Brush.linearGradient(
+                                        colors = listOf(Color.Red,Color.Green,Color.Blue,Color.Yellow,Color.Cyan,Color.Magenta),
+                                        start = start,
+                                        end = end
+                                    ),
+                                    start = start,
+                                    end = end,
+                                    strokeWidth = 60f,
+                                )
+                            }
                         }
                     }
                 }
