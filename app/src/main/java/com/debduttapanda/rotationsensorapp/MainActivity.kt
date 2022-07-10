@@ -1,33 +1,21 @@
 package com.debduttapanda.rotationsensorapp
 
-import android.graphics.Paint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.debduttapanda.rotationsensorapp.ui.theme.RotationSensorAppTheme
-import com.kviation.sample.orientation.Orientation
-import kotlin.math.*
 
 private val Float.toRadians: Double
     get() {
@@ -71,7 +59,14 @@ class MainActivity : ComponentActivity(), Orientation.Listener {
                             rotate(degrees = roll.value, rect.center) {
                                 drawLine(
                                     Brush.linearGradient(
-                                        colors = listOf(Color.Red,Color.Green,Color.Blue,Color.Yellow,Color.Cyan,Color.Magenta),
+                                        colors = listOf(
+                                            Color.Red,
+                                            Color.Green,
+                                            Color.Blue,
+                                            Color.Yellow,
+                                            Color.Cyan,
+                                            Color.Magenta
+                                        ),
                                         start = start,
                                         end = end
                                     ),

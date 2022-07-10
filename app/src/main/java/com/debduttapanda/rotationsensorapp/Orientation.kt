@@ -1,4 +1,4 @@
-package com.kviation.sample.orientation
+package com.debduttapanda.rotationsensorapp
 
 import android.app.Activity
 import android.hardware.Sensor
